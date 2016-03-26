@@ -1,4 +1,5 @@
 /.idea
 /excel-cep.iml
 /target
+/dependency-reduced-pom.xml
 .DS_Store
