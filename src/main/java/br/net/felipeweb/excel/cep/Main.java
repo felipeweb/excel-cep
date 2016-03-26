@@ -55,7 +55,7 @@ public class Main extends Application {
 						} catch (Exception ex) {
 							Alert alert = new Alert(AlertType.ERROR);
 							alert.setTitle("ERRO");
-							alert.setHeaderText("Arquivo Erro inesperado");
+							alert.setHeaderText("Erro inesperado");
 							alert.showAndWait();
 						}
 					} else {
@@ -89,10 +89,8 @@ public class Main extends Application {
 	}
 
 	private static void configureFileChooser(final FileChooser fileChooser){
-		fileChooser.setTitle("View Pictures");
-		fileChooser.setInitialDirectory(
-				new File(System.getProperty("user.home"))
-		);
+		fileChooser.setTitle("Abrir planilha");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 	}
 
 }
