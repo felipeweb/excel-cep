@@ -2,6 +2,9 @@ package br.net.felipeweb.excel.cep;
 
 import br.net.felipeweb.excel.cep.manipulator.ExcelManipulator;
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Main extends Application {
 
@@ -38,6 +42,7 @@ public class Main extends Application {
 		HBox hbCollCep = new HBox();
 		hbCollCep.getChildren().addAll(label2, colCep);
 		hbCollCep.setSpacing(10);
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
 
 		openButton.setOnAction(
 				e -> {
@@ -45,12 +50,14 @@ public class Main extends Application {
 					File file = fileChooser.showOpenDialog(stage);
 					if (file != null && file.getName().endsWith(".xlsx")) {
 						try {
-							new ExcelManipulator(file, sheetName.getText(), colCep.getText()).getAddress();
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Informação");
-							alert.setHeaderText("Concluido");
-							alert.showAndWait();
-							System.exit(0);
+							executorService.submit(() -> {
+								try {
+									new ExcelManipulator(file, sheetName.getText(), colCep.getText()).getAddress();
+								} catch (IOException | InvalidFormatException e1) {
+									throw new RuntimeException(e1);
+								}
+								System.exit(0);
+							});
 
 						} catch (Exception ex) {
 							Alert alert = new Alert(AlertType.ERROR);
