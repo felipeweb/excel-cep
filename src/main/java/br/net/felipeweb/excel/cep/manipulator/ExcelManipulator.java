@@ -52,7 +52,7 @@ public class ExcelManipulator {
 			XSSFRow row = sheet.getRow(i);
 			XSSFCell cell = row.getCell(ref.getCol());
 			String cep = cell.getRawValue();
-			Endereco endereco = findCep(cep);
+			Endereco endereco = findCep(cep, i);
 			short lastCellNum = row.getLastCellNum();
 			if (endereco != null) {
 				XSSFCell rowCellRua = row.createCell(lastCellNum);
@@ -95,11 +95,11 @@ public class ExcelManipulator {
 		}
 	}
 
-	private Endereco findCep(String cep) {
+	private Endereco findCep(String cep, int i) {
 		Endereco endereco = null;
 		try {
 			endereco = Postmon.consultar(Consultas.CEP).cep(cep).buscar();
-			System.out.println(endereco.toString());
+			System.out.println(i + " - " + endereco.toString());
 		} catch (PostmonAPIException e) {
 			System.out.println(e.getMessage());
 			try {
